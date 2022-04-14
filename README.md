@@ -3,7 +3,6 @@
 The purpose of this project is to build an API that simulates a zoo, using simple development resources.
 With each repository released, a new update is made to the project, so that it brings security and stability improvements. (This API is purely developed for educational purposes.)
 **Technology being Used: Python With Flask Framework**
-**Version in this repository: 1.0**
 ## Introduction
 A dictionary is responsible for storing the data submitted to the API:
 
