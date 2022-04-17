@@ -1,8 +1,9 @@
-# Zoo simulation API (Version 1)
+# Zoo simulation API (Version 3)
 
 The purpose of this project is to build an API that simulates a zoo, using simple development resources.
 With each repository released, a new update is made to the project, so that it brings security and stability improvements. (This API is purely developed for educational purposes.)
 **Technology being Used: Python With Flask Framework**
+**Version in this repository: 3.0**
 ## Introduction
 A dictionary is responsible for storing the data submitted to the API:
 
@@ -20,8 +21,11 @@ The API provides 5 accesses:
  - Remove an animal from the dictionary (DELETE)
  
  *For routes that receive PATCH, PUT and DELETE methods, all of them must have a string as a variable in the endpoint, so that the animal sought is identified.*
+ ## Update Notes:
+This update did not add any new features. Only the system architecture was reformulated, approaching the MVC model.
+A new file called models.py was added to the project, it is responsible for managing all actions that occur in the database (dictionary), relieving the main file of CRUD operations. This same file is also the data validator.
 ## Main Problems
-This version of the API is not secure, it does not have any data validation system, nor access control. If any user submits a payload with random data, it will be registered. There is also no persistence of the submitted data. If the server restarts, everything that was done will be lost.
+The API does not have access control (authentication), as well as it does not have persistence in the submitted data.
 ## Tests
 The focus of the tests is to verify that the routes are operating normally (absence of errors on the part of the server). A test is also done to verify the application response when a non-existent route is accessed.
 ## How to use
@@ -47,4 +51,9 @@ To register an animal (POST):
 To delete and animal (DELETE)
 
      curl -X DELETE http://127.0.0.1:5000/delete-animal/Horse
+With the data validation system, you can send a payload with wrong fields, and check the server's response. As an example, try the following post:
+
+    curl -X POST http://127.0.0.1:5000/create-animal
+    -H 'Content-Type: application/json'
+    -d '{"weight":12,"age":"3"}'
 
