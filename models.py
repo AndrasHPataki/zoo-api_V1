@@ -1,46 +1,5 @@
 from flask import request, jsonify
 
-class Zoo:
-    zoo = {"animals": [
-    {"name": "Horse", "age": 3},
-    {"name": "Zebra", "age": 10},
-    {"name": "Elephant", "age": 22}
-    ]}
-
-    def see_all(self):
-        return self.zoo['animals']
-
-    def create_animal(self,data):
-        self.zoo['animals'].append(data)
-        animal_name =data.get('name') 
-        return {"message": f'Animal {animal_name} Created!'}
-
-    def update_animal(self,data,name):
-        index = -1
-        for animal in self.zoo['animals']:
-            index += 1
-            if animal.get('name') == name:
-                self.zoo['animals'].remove(animal)
-                self.zoo['animals'].insert(index,data)
-                return {"message": f'Animal {name} Updated!'}
-        self.zoo['animals'].append(data)
-        return {"message": f'Animal {name} Created!'}
-
-    def delete_animal(self,name):
-        for animal in self.zoo['animals']:
-            if animal.get('name') == name:
-                self.zoo['animals'].remove(animal)
-                return {"message": f'Animal {name} deleted!'}
-        return {"message": f'Animal {name} Not found!'}
-
-    def partial_update(self,data,name):
-        for animal in self.zoo['animals']:
-            if animal.get('name') == name:
-                animal.update(data)
-                return {"message": f'Animal {name} Partially Updated!'}
-        return {"message": f'Animal {name} Not found!'}
-
-
 class Schema:
   status = {"payload_is_correct": False,
             "name_is_correct":False,
@@ -74,9 +33,54 @@ class Schema:
 
 def animal_data_validator(func):
     def wrapper(*args, **kwargs):
+        
         data = request.get_json()
         validate_animal = Schema(data).check()
         if validate_animal == True:
             return func(*args, **kwargs)
-        else: return jsonify(validate_animal)
+        else:
+            return validate_animal
     return wrapper
+
+class Zoo:
+    zoo = {"animals": [
+    {"name": "Horse", "age": 3},
+    {"name": "Zebra", "age": 10},
+    {"name": "Elephant", "age": 22}
+    ]}
+
+    def see_all(self):
+        return self.zoo['animals']
+
+    @animal_data_validator
+    def create_animal(self,data):
+        self.zoo['animals'].append(data)
+        animal_name =data.get('name') 
+        return {"message": f'Animal {animal_name} Created!'}
+
+    @animal_data_validator
+    def update_animal(self,data,name):
+        index = -1
+        for animal in self.zoo['animals']:
+            index += 1
+            if animal.get('name') == name:
+                self.zoo['animals'].remove(animal)
+                self.zoo['animals'].insert(index,data)
+                return {"message": f'Animal {name} Updated!'}
+        self.zoo['animals'].append(data)
+        return {"message": f'Animal {name} Created!'}
+
+    def delete_animal(self,name):
+        for animal in self.zoo['animals']:
+            if animal.get('name') == name:
+                self.zoo['animals'].remove(animal)
+                return {"message": f'Animal {name} deleted!'}
+        return {"message": f'Animal {name} Not found!'}
+
+    @animal_data_validator
+    def partial_update(self,data,name):
+        for animal in self.zoo['animals']:
+            if animal.get('name') == name:
+                animal.update(data)
+                return {"message": f'Animal {name} Partially Updated!'}
+        return {"message": f'Animal {name} Not found!'}
