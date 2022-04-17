@@ -1,5 +1,5 @@
 from flask import Flask,jsonify,request, json
-from models import Zoo,animal_data_validator
+from models import Zoo
 
 app = Flask(__name__)
 
@@ -21,13 +21,11 @@ def see_all():
     return jsonify(result)
 
 @app.post("/create-animal",endpoint='create_animal')
-@animal_data_validator
 def create_animal():
     result = Zoo().create_animal(request.get_json())
     return jsonify(result)
    
 @app.put("/update-animal/<string:animal_name>",endpoint='update_animal')
-@animal_data_validator
 def update_animal(animal_name):
     result = Zoo().update_animal(request.get_json(),animal_name)
     return jsonify(result)
@@ -38,7 +36,6 @@ def delete_animal(animal_name):
     return jsonify(result)
 
 @app.patch("/partial-update/<string:animal_name>",endpoint='partial_update')
-@animal_data_validator
 def partial_update(animal_name):
     result = Zoo().partial_update(request.get_json(),animal_name)
     return jsonify(result)
